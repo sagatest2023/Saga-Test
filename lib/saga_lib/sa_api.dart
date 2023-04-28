@@ -71,6 +71,7 @@ class SAApi {
     log.porta = ipSeparado.last;
     log.controller = pathSeparado[4];
     log.nomeMetodo = pathSeparado[5];
+    log.parametros = request.queryParameters;
 
     print('\n${request.method} ${request.path} $parameters');
   }
@@ -156,6 +157,7 @@ class SAApi {
       }
       rethrow;
     } finally {
+      print(log.resultado.runtimeType);
       logsList.value.add(log);
       logsList.notifyListeners();
     }
@@ -181,6 +183,7 @@ class SAApi {
       }
       rethrow;
     } finally {
+      print(log.resultado.runtimeType);
       logsList.value.add(log);
       logsList.notifyListeners();
     }
@@ -196,6 +199,7 @@ class SAApi {
     try {
       final response = await dio.post("$baseURL$path", data: values);
       final result = getResult(response, fromJson);
+      log.resultado = result;
       return result;
     } catch (ex) {
       if (log.resultado != null) {
@@ -205,6 +209,7 @@ class SAApi {
       }
       rethrow;
     } finally {
+      print(log.resultado.runtimeType);
       logsList.value.add(log);
       logsList.notifyListeners();
     }
@@ -220,6 +225,7 @@ class SAApi {
     try {
       final response = await dio.post("$baseURL$path", data: values);
       final list = getResult(response, fromJson);
+      log.resultado = list;
       return list;
     } catch (ex) {
       if (log.resultado != null) {
@@ -229,6 +235,7 @@ class SAApi {
       }
       rethrow;
     } finally {
+      print(log.resultado.runtimeType);
       logsList.value.add(log);
       logsList.notifyListeners();
     }
@@ -299,6 +306,7 @@ class InfoLog {
     this.controller = "Não tem ou não encontrado",
     this.nomeMetodo = "Não tem ou não encontrado",
     this.descricao = "Não tem ou não encontrado",
+    this.parametros,
     this.tempo = "Não tem ou não encontrado",
     this.resultado,
   });
@@ -309,6 +317,7 @@ class InfoLog {
   String controller;
   String nomeMetodo;
   String? descricao;
+  Map<String, dynamic>? parametros;
   String tempo;
 
   dynamic resultado;

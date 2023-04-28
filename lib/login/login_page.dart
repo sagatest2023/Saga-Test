@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saga_test/helpers/page_routes.dart';
 import 'package:saga_test/login/login_api.dart';
-import 'package:saga_test/logs/dialogs.dart';
 import 'package:saga_test/saga_lib/sa_network.dart';
 
 import '../components/default_button.dart';
@@ -11,6 +10,7 @@ import '../components/default_card.dart';
 import '../components/default_dialog.dart';
 import '../components/default_page.dart';
 import '../components/default_text_field.dart';
+import '../components/log_menu.dart';
 import '../main/app.dart';
 
 class LoginPage extends StatelessWidget {

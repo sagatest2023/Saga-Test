@@ -52,6 +52,26 @@ class _LogMenuState extends State<LogMenu> {
                       ? ValueListenableBuilder(
                           valueListenable: currentIndexChoose,
                           builder: (context, value, child) {
+                            String parametros =
+                                "Esse método não pede parametros.";
+
+                            if (logsList.value[currentIndexChoose.value]
+                                    .parametros !=
+                                null) {
+                              if (logsList.value[currentIndexChoose.value]
+                                  .parametros!.isNotEmpty) {
+                                parametros = "";
+                                logsList
+                                    .value[currentIndexChoose.value].parametros!
+                                    .forEach(
+                                  (key, value) {
+                                    parametros += "$key: $value\n";
+                                  },
+                                );
+                                parametros = parametros.substring(
+                                    0, parametros.length - 1);
+                              }
+                            }
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -75,7 +95,7 @@ class _LogMenuState extends State<LogMenu> {
                                     ),
                                   ],
                                 ),
-                                Divider(),
+                                const Divider(),
                                 logsList.value[currentIndexChoose.value]
                                             .resultado is Exception ||
                                         logsList.value[currentIndexChoose.value]
@@ -132,6 +152,12 @@ class _LogMenuState extends State<LogMenu> {
                                     ""),
                                 const SizedBox(height: 8),
                                 const Text(
+                                  "Paramêtros (pedidos pelo método/enviados)",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(parametros),
+                                const SizedBox(height: 8),
+                                const Text(
                                   "Tempo de duração da chamada(ms):",
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
@@ -143,9 +169,14 @@ class _LogMenuState extends State<LogMenu> {
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  logsList
-                                      .value[currentIndexChoose.value].resultado
-                                      .toString(),
+                                  logsList.value[currentIndexChoose.value]
+                                          .resultado is Exception
+                                      ? logsList.value[currentIndexChoose.value]
+                                          .resultado
+                                          .toString()
+                                      : logsList.value[currentIndexChoose.value]
+                                          .resultado.runtimeType
+                                          .toString(),
                                 ),
                                 Expanded(
                                   child: Container(
@@ -195,4 +226,91 @@ class _LogMenuState extends State<LogMenu> {
       ],
     );
   }
+}
+
+Future<void> showResult(BuildContext context) async {
+  final infoLog = logsList.value.last;
+  await showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        content: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.5,
+          height: MediaQuery.of(context).size.height * 0.8,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              infoLog.resultado is Exception
+                  ? const Center(
+                      child: Icon(
+                        Icons.error_rounded,
+                        color: Colors.red,
+                        size: 150,
+                      ),
+                    )
+                  : const Center(
+                      child: Icon(
+                        Icons.check_circle_rounded,
+                        color: Colors.green,
+                        size: 150,
+                      ),
+                    ),
+              const SizedBox(height: 32),
+              const Text(
+                "IP:",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(infoLog.ip),
+              const SizedBox(height: 8),
+              const Text(
+                "PORTA:",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(infoLog.porta),
+              const SizedBox(height: 8),
+              const Text(
+                "Nome do método:",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(infoLog.nomeMetodo),
+              const SizedBox(height: 8),
+              const Text(
+                "Nome do controller:",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(infoLog.controller),
+              const SizedBox(height: 8),
+              const Text(
+                "Descrição do método:",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(infoLog.descricao ?? ""),
+              const SizedBox(height: 8),
+              const Text(
+                "Tempo de duração da chamada(ms):",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(infoLog.tempo),
+              const SizedBox(height: 8),
+              const Text(
+                "Resultado:",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(infoLog.resultado is Exception
+                  ? infoLog.resultado.toString()
+                  : infoLog.resultado.runtimeType.toString()),
+            ],
+          ),
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("Sair"),
+          )
+        ],
+      );
+    },
+  );
 }

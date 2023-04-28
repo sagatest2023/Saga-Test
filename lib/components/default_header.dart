@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import 'package:saga_test/login/login_api.dart';
 
 import '../helpers/page_routes.dart';
-import '../logs/dialogs.dart';
 import '../main/app.dart';
 import '../saga_lib/sa_api.dart';
 import 'default_button.dart';
 import 'default_dialog.dart';
 import 'default_text_field.dart';
+import 'log_menu.dart';
 import 'popup_menu_content.dart';
 
 class DefaultHeader extends StatelessWidget {
